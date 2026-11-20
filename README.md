@@ -1,636 +1,303 @@
-\# Todo List Management API
+# Todo List Management API
 
+RESTful API untuk mengelola daftar tugas (*Todo*), kategori, autentikasi pengguna, riwayat aktivitas, dan statistik. Project ini dikembangkan menggunakan **Node.js, Express.js, dan MongoDB**.
 
+---
 
-RESTful API untuk mengelola daftar tugas (Todo), kategori, autentikasi pengguna, riwayat aktivitas, dan statistik menggunakan Node.js, Express, dan MongoDB.
+## Fitur Utama
 
+| Fitur | Deskripsi |
+|---|---|
+| Authentication | Registrasi, login, JWT, dan profil pengguna |
+| Role Authorization | Pembatasan akses berdasarkan role admin |
+| Todo Management | CRUD tugas, status, prioritas, dan kategori |
+| Category Management | CRUD kategori tugas |
+| Filtering & Search | Filter, pencarian, sorting, dan pagination |
+| Activity Log | Melihat riwayat aktivitas pengguna |
+| Statistics | Menampilkan ringkasan statistik menggunakan API Key |
+| API Documentation | Dokumentasi endpoint menggunakan Swagger UI |
 
-
-\## Fitur Utama
-
-
-
-\- \*\*Authentication\*\*
-
-&#x20; - Registrasi pengguna.
-
-&#x20; - Login menggunakan email dan password.
-
-&#x20; - Autentikasi menggunakan JSON Web Token (JWT).
-
-&#x20; - Melihat profil pengguna yang sedang login.
-
-&#x20; - Pembatasan akses khusus admin.
-
-
-
-\- \*\*Todo Management\*\*
-
-&#x20; - Membuat, melihat, memperbarui, dan menghapus Todo.
-
-&#x20; - Mengatur status dan prioritas tugas.
-
-&#x20; - Menghubungkan Todo dengan kategori.
-
-&#x20; - Filter berdasarkan status, prioritas, dan kategori.
-
-&#x20; - Pencarian, sorting, dan pagination.
-
-
-
-\- \*\*Category Management\*\*
-
-&#x20; - Membuat, melihat, memperbarui, dan menghapus kategori.
-
-&#x20; - Pencarian, sorting, dan pagination.
-
-
-
-\- \*\*Activity Log\*\*
-
-&#x20; - Melihat riwayat aktivitas pengguna yang sedang login.
-
-
-
-\- \*\*Statistics\*\*
-
-&#x20; - Mendapatkan ringkasan statistik Todo.
-
-&#x20; - Menggunakan API Key untuk mengakses endpoint statistik.
-
-
-
-\- \*\*API Documentation\*\*
-
-&#x20; - Dokumentasi endpoint menggunakan Swagger UI.
-
-
-
-\## Teknologi yang Digunakan
-
-
+## Teknologi
 
 | Teknologi | Kegunaan |
-
 |---|---|
-
 | Node.js | JavaScript runtime |
-
 | Express.js 5 | Framework backend |
-
 | MongoDB | Database NoSQL |
-
 | Mongoose | ODM untuk MongoDB |
-
-| JSON Web Token | Autentikasi |
-
+| JSON Web Token | Autentikasi pengguna |
 | bcryptjs | Password hashing |
-
 | express-validator | Validasi input |
-
-| Swagger | Dokumentasi API |
-
+| Swagger UI | Dokumentasi API |
 | dotenv | Pengelolaan environment variable |
-
-| Jest | Testing |
-
+| Jest | Automated testing |
 | Supertest | HTTP endpoint testing |
-
 | mongodb-memory-server | Database sementara untuk testing |
-
 | Nodemon | Development server |
 
+---
 
+## Persyaratan
 
-\## Persyaratan
+Pastikan perangkat sudah memiliki:
 
+- Node.js
+- npm
+- MongoDB Atlas atau server MongoDB yang dapat diakses
+- Git
 
+## Instalasi
 
-Pastikan sudah menginstal:
+**1. Clone repository**
 
-
-
-\- Node.js
-
-\- npm
-
-\- MongoDB Atlas atau MongoDB yang dapat diakses oleh aplikasi.
-
-\- Git (opsional).
-
-
-
-\## Instalasi
-
-
-
-1\. Clone repository:
-
-
-
-&#x20;  ```bash
-
-&#x20;  git clone <URL\_REPOSITORY>
-
-&#x20;  ```
-
-
-
-2\. Masuk ke folder project:
-
-
-
-&#x20;  ```bash
-
-&#x20;  cd Post-Production
-
-&#x20;  ```
-
-
-
-3\. Install dependencies:
-
-
-
-&#x20;  ```bash
-
-&#x20;  npm install
-
-&#x20;  ```
-
-
-
-4\. Buat file `.env` di folder utama project.
-
-
-
-5\. Isi konfigurasi environment variable seperti contoh berikut.
-
-
-
-\## Environment Variables
-
-
-
-Buat file `.env` di root project:
-
-
-
-```env
-
-PORT=3000
-
-
-
-MONGODB\_URI=your\_mongodb\_connection\_string
-
-
-
-JWT\_SECRET=your\_jwt\_secret
-
-
-
-JWT\_EXPIRES\_IN=7d
-
-
-
-API\_KEY=your\_api\_key
-
+```bash
+git clone https://github.com/Afdhal-Riyadi/Todo-List-Management-API.git
 ```
 
+**2. Masuk ke folder project**
 
+```bash
+cd Todo-List-Management-API
+```
 
-Keterangan:
+**3. Install dependencies**
 
+```bash
+npm install
+```
 
+**4. Buat file `.env`**
+
+Buat file `.env` pada direktori utama project, kemudian isi konfigurasi berikut dengan nilai milik sendiri.
+
+```env
+PORT=3000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=7d
+API_KEY=your_api_key
+```
+
+### Environment Variables
 
 | Variable | Deskripsi |
-
 |---|---|
+| `PORT` | Port server |
+| `MONGODB_URI` | Connection string MongoDB |
+| `JWT_SECRET` | Secret untuk JWT |
+| `JWT_EXPIRES_IN` | Masa berlaku token |
+| `API_KEY` | API Key untuk endpoint statistik |
 
-| PORT | Port untuk menjalankan server |
+> **Keamanan:** Jangan membagikan file `.env`, JWT Secret, API Key, atau connection string database. File `.env` sudah dikecualikan melalui `.gitignore`.
 
-| MONGODB\_URI | Connection string MongoDB |
+---
 
-| JWT\_SECRET | Secret key untuk JWT |
-
-| JWT\_EXPIRES\_IN | Masa berlaku token JWT |
-
-| API\_KEY | API Key untuk endpoint statistik |
-
-
-
-\*\*Catatan keamanan:\*\*
-
-\- Jangan membagikan isi file `.env`.
-
-\- Jangan mengunggah `.env` ke repository Git.
-
-\- Gunakan secret dan API Key yang kuat.
-
-
-
-\## Menjalankan Aplikasi
-
-
+## Menjalankan Aplikasi
 
 Jalankan server dalam mode development:
 
-
-
 ```bash
-
 npm run dev
-
 ```
 
-
-
-Atau mode biasa:
-
-
-
-```bash
-
-npm start
-
-```
-
-
-
-Jika berhasil, server akan berjalan pada port yang dikonfigurasi, secara default:
-
-
+Jika berhasil, server berjalan pada port yang dikonfigurasi, secara default:
 
 ```text
-
 http://localhost:3000
-
 ```
 
-
-
-\## Dokumentasi API
-
-
+## Dokumentasi API — Swagger UI
 
 Dokumentasi endpoint tersedia melalui Swagger UI.
 
-
-
 Buka browser dan akses:
 
-
-
 ```text
-
 http://localhost:3000/api-docs
-
 ```
 
+Swagger UI digunakan untuk melihat endpoint, parameter, request body, serta mencoba request API.
 
+---
 
-Swagger digunakan untuk melihat dokumentasi, parameter, request body, dan mencoba endpoint API.
-
-
-
-\## API Endpoints
-
-
+## API Endpoints
 
 Base URL:
 
-
-
 ```text
-
 http://localhost:3000
-
 ```
 
-
-
-\### 1. Authentication
-
-
+### 1. Authentication
 
 Base path: `/api/auth`
 
-
-
 | Method | Endpoint | Deskripsi | Akses |
-
 |---|---|---|---|
-
 | POST | `/api/auth/register` | Registrasi pengguna | Public |
-
 | POST | `/api/auth/login` | Login pengguna | Public |
-
 | GET | `/api/auth/me` | Melihat profil pengguna | JWT |
-
 | GET | `/api/auth/admin-only` | Endpoint khusus admin | Admin |
 
-
-
-\### 2. Todo
-
-
+### 2. Todo Management
 
 Base path: `/api/todos`
 
-
-
 | Method | Endpoint | Deskripsi | Akses |
-
 |---|---|---|---|
-
 | POST | `/api/todos` | Membuat Todo | JWT |
-
 | GET | `/api/todos` | Mendapatkan daftar Todo | JWT |
-
 | GET | `/api/todos/:id` | Mendapatkan detail Todo | JWT |
-
 | PATCH | `/api/todos/:id` | Memperbarui Todo | JWT |
-
 | DELETE | `/api/todos/:id` | Menghapus Todo | JWT |
 
+**Fitur tambahan Todo:**
 
+- Filter berdasarkan status, priority, dan category.
+- Pencarian menggunakan `search`.
+- Sorting menggunakan `sortBy` dan `order`.
+- Pagination menggunakan `page` dan `limit`.
 
-Fitur tambahan pada daftar Todo:
+**Status Todo:**
 
-\- Filter berdasarkan `status`.
+- `pending`
+- `in_progress`
+- `completed`
 
-\- Filter berdasarkan `priority`.
+**Prioritas Todo:**
 
-\- Filter berdasarkan `category`.
+- `low`
+- `medium`
+- `high`
 
-\- Sorting menggunakan `sortBy` dan `order`.
-
-\- Pagination menggunakan `page` dan `limit`.
-
-\- Pencarian menggunakan `search`.
-
-
-
-Status Todo:
-
-\- `pending`
-
-\- `in\_progress`
-
-\- `completed`
-
-
-
-Prioritas Todo:
-
-\- `low`
-
-\- `medium`
-
-\- `high`
-
-
-
-\### 3. Category
-
-
+### 3. Category Management
 
 Base path: `/api/categories`
 
-
-
 | Method | Endpoint | Deskripsi | Akses |
-
 |---|---|---|---|
-
 | POST | `/api/categories` | Membuat kategori | JWT |
-
 | GET | `/api/categories` | Mendapatkan daftar kategori | JWT |
-
 | GET | `/api/categories/:id` | Mendapatkan detail kategori | JWT |
-
 | PATCH | `/api/categories/:id` | Memperbarui kategori | JWT |
-
 | DELETE | `/api/categories/:id` | Menghapus kategori | JWT |
-
-
 
 Fitur tambahan:
 
-\- Pencarian menggunakan `search`.
+- Pencarian menggunakan `search`.
+- Sorting menggunakan `sortBy` dan `order`.
+- Pagination menggunakan `page` dan `limit`.
 
-\- Sorting menggunakan `sortBy` dan `order`.
-
-\- Pagination menggunakan `page` dan `limit`.
-
-
-
-\### 4. Activity Log
-
-
+### 4. Activity Log
 
 Base path: `/api/activity-logs`
 
-
-
 | Method | Endpoint | Deskripsi | Akses |
-
 |---|---|---|---|
-
 | GET | `/api/activity-logs` | Melihat riwayat aktivitas pengguna | JWT |
 
-
-
-\### 5. Statistics
-
-
+### 5. Statistics
 
 Base path: `/api/stats`
 
-
-
 | Method | Endpoint | Deskripsi | Akses |
-
 |---|---|---|---|
-
 | GET | `/api/stats/summary` | Mendapatkan ringkasan statistik Todo | API Key |
 
-
-
-Endpoint statistik membutuhkan header:
-
-
+Endpoint statistik menggunakan header:
 
 ```http
-
-x-api-key: YOUR\_API\_KEY
-
+x-api-key: YOUR_API_KEY
 ```
 
+---
 
+## Autentikasi
 
-\## Autentikasi
-
-
-
-Endpoint yang membutuhkan login menggunakan Bearer Token.
-
-
+Endpoint yang membutuhkan autentikasi menggunakan **Bearer Token**.
 
 Tambahkan header berikut pada request:
 
-
-
 ```http
-
-Authorization: Bearer YOUR\_JWT\_TOKEN
-
+Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
+Token JWT diperoleh setelah pengguna berhasil login.
 
+Untuk mengakses endpoint khusus admin, pengguna harus memiliki role `admin`.
 
-Token didapatkan setelah pengguna berhasil login.
+## Testing
 
-
-
-Untuk endpoint admin-only, pengguna harus memiliki role admin.
-
-
-
-\## Testing
-
-
-
-Jalankan seluruh pengujian menggunakan perintah:
-
-
+Jalankan pengujian otomatis menggunakan:
 
 ```bash
-
 npm test
-
 ```
-
-
 
 Project menggunakan:
 
-\- Jest untuk menjalankan pengujian.
+- **Jest** untuk menjalankan pengujian.
+- **Supertest** untuk menguji HTTP endpoint.
+- **mongodb-memory-server** untuk menyediakan database sementara saat testing.
 
-\- Supertest untuk menguji HTTP endpoint.
+---
 
-\- mongodb-memory-server untuk menyediakan database sementara saat testing.
-
-
-
-\## Struktur Project
-
-
+## Struktur Project
 
 ```text
-
-Post-Production/
-
+Todo-List-Management-API/
 │
-
 ├── config/
-
-│   ├── db.js
-
-│   └── swagger.js
-
-│
-
 ├── controller/
-
 ├── middleware/
-
 ├── model/
-
-├── routes/
-
-├── service/
-
-├── util/
-
-├── validator/
-
-│
-
-├── tests/
-
 ├── postman/
-
 ├── .postman/
-
+├── routes/
+├── tests/
+├── util/
+├── validator/
 │
-
 ├── app.js
-
 ├── server.js
-
 ├── package.json
-
 ├── package-lock.json
-
-└── .gitignore
-
+├── test-models.js
+├── test-relasi.js
+├── .gitignore
+└── README.md
 ```
 
+## Error Handling
 
+Project menggunakan beberapa mekanisme untuk menangani kesalahan:
 
-\## Error Handling
+- `AppError` untuk pengelolaan error aplikasi.
+- `catchAsync` untuk menangani error asynchronous.
+- Global error handler untuk menangani error secara terpusat.
+- `express-validator` untuk validasi request.
 
+## Keamanan
 
+Beberapa mekanisme keamanan yang diterapkan:
 
-Project menggunakan:
+- Password disimpan dalam bentuk hash menggunakan bcryptjs.
+- Autentikasi menggunakan JWT.
+- Pembatasan akses berdasarkan role pengguna.
+- Validasi data request.
+- API Key untuk endpoint statistik.
+- File `.env` dan folder `node_modules` dikecualikan melalui `.gitignore`.
 
-\- AppError untuk pengelolaan error.
+---
 
-\- catchAsync untuk menangani error asynchronous.
+## Author
 
-\- Global error handler untuk menangani error aplikasi.
+**Muhammad Afdhal Riyadi**
 
-\- Validasi request menggunakan express-validator.
+Project: **Todo List Management API**
 
+Repository: [GitHub - Todo List Management API](https://github.com/Afdhal-Riyadi/Todo-List-Management-API)
 
+---
 
-\## Keamanan
-
-
-
-Beberapa mekanisme keamanan yang digunakan:
-
-\- Password disimpan dalam bentuk hash menggunakan bcryptjs.
-
-\- Autentikasi menggunakan JWT.
-
-\- Pembatasan akses berdasarkan role pengguna.
-
-\- Validasi data request.
-
-\- API Key untuk endpoint statistik.
-
-\- File `.env` dan folder `node\_modules` dikecualikan melalui `.gitignore`.
-
-
-
-\## Author
-
-
-
-\*\*Muhammad Afdhal Riyadi\*\*
-
-
-
-Project: Todo List Management API
-
-
-
-\## License
-
-
-
-Project ini dibuat untuk keperluan pembelajaran dan pengembangan backend API.
-
+*Project ini dibuat untuk keperluan pembelajaran dan pengembangan backend API.*
