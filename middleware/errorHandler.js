@@ -1,4 +1,14 @@
+
 const errorHandler = (err, req, res, next) => {
+  // Menampilkan detail error di terminal atau Vercel Logs
+  console.error('========== SERVER ERROR ==========');
+  console.error('URL:', req.originalUrl);
+  console.error('METHOD:', req.method);
+  console.error('NAME:', err.name);
+  console.error('MESSAGE:', err.message);
+  console.error('STACK:', err.stack);
+  console.error('===================================');
+
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Terjadi kesalahan pada server';
 
@@ -23,7 +33,11 @@ const errorHandler = (err, req, res, next) => {
   }
 
   // Malformed JSON
-  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+  if (
+    err instanceof SyntaxError &&
+    err.status === 400 &&
+    'body' in err
+  ) {
     statusCode = 400;
     message = 'Format JSON tidak valid';
   }
